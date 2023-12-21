@@ -81,10 +81,19 @@ async function getChats() {
         >
       </li>
     </ul>
+    <br /><br />
 
+    Chat with {{ email2 }} <br /><br />
     <div v-for="chat in chats">
-      <div>
-        {{ chat.from.email }} -> {{ chat.to.email }} : {{ chat.message }}
+      <div v-if="chat.from.id == id1 && chat.to.id == id2">
+        <div>
+          {{ chat.from.email }} -> {{ chat.to.email }} : {{ chat.message }}
+        </div>
+      </div>
+      <div v-if="chat.from.id == id2 && chat.to.id == id1">
+        <div>
+          {{ chat.from.email }} -> {{ chat.to.email }} : {{ chat.message }}
+        </div>
       </div>
     </div>
   </div>
