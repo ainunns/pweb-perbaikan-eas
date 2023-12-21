@@ -8,6 +8,7 @@ const id2 = ref("");
 const email2 = ref("");
 const users = ref([]);
 const chats = ref([]);
+const chat = ref();
 
 async function login() {
   const res = await fetch("http://localhost:3000/api/users/login", {
@@ -51,6 +52,22 @@ async function getChats() {
   const json = await res.json();
   console.log(json);
   chats.value = json.docs;
+}
+
+async function sendChat() {
+  const res = await fetch("http://localhost:3000/api/chats", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: id1.value,
+      to: id2.value,
+      message: chat.value,
+    }),
+  });
+
+  getChats();
 }
 </script>
 
@@ -97,4 +114,7 @@ async function getChats() {
       </div>
     </div>
   </div>
+  <br />
+  <input v-model="chat" />
+  <button @click="sendChat()">Send</button>
 </template>
