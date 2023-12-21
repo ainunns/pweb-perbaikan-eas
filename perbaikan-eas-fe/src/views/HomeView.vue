@@ -4,7 +4,10 @@ const email = ref("");
 const password = ref("");
 const id1 = ref("");
 const email1 = ref("");
+const id2 = ref("");
+const email2 = ref("");
 const users = ref([]);
+const chats = ref([]);
 
 async function login() {
   const res = await fetch("http://localhost:3000/api/users/login", {
@@ -38,6 +41,17 @@ async function getUsers() {
   console.log(json);
   users.value = json.docs;
 }
+
+async function getChats() {
+  const res = await fetch("http://localhost:3000/api/chats", {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const json = await res.json();
+  console.log(json);
+  chats.value = json.docs;
+}
 </script>
 
 <template>
@@ -45,6 +59,8 @@ async function getUsers() {
   Password: {{ password }}<br /><br />
   Id1: {{ id1 }}<br />
   Email1: {{ email1 }}<br /><br />
+  Id2: {{ id2 }}<br />
+  Email2: {{ email2 }}<br /><br />
   <div v-if="id1 == ''">
     <h1>Login</h1>
     <input v-model="email" placeholder="email" /><br />
@@ -55,8 +71,21 @@ async function getUsers() {
     <h1>Chat</h1>
     <ul>
       <li v-for="user in users" :key="user.id">
-        <a>{{ user.email }}</a>
+        <a
+          @click="
+            id2 = user.id;
+            email2 = user.email;
+            getChats();
+          "
+          >{{ user.email }}</a
+        >
       </li>
     </ul>
+
+    <div v-for="chat in chats">
+      <div>
+        {{ chat.from.email }} -> {{ chat.to.email }} : {{ chat.message }}
+      </div>
+    </div>
   </div>
 </template>
